@@ -11,7 +11,7 @@ exports.shorthands = undefined;
 exports.up = (pgm) => {
     pgm.createType('link_precedence', ['primary', 'secondary']);
     pgm.createTable({ name: 'contact' }, {
-        id: { type: 'uuid', primaryKey: true },
+        id: { type: 'serial', primaryKey: true },
         phone_number: { type: 'text', notNull: false },
         email: { type: 'text', notNull: false },
         linked_id: { type: 'text', notNull: false },
