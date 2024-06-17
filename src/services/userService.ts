@@ -1,6 +1,5 @@
 import { ContactResponse, UserContactSearch } from "../dto/contact";
 import { UserRepository } from "../models/repositories/userRepository";
-import moment from 'moment-timezone';
 
 export class UserService {
     private userRepository: UserRepository;
@@ -22,8 +21,8 @@ export class UserService {
 
         return {
             primaryContactId: parseInt(newContact.id, 10),
-            emails: [email],
-            phoneNumbers: [phoneNumber],
+            emails: [newContact.email],
+            phoneNumbers: [newContact.phoneNumber],
             secondaryContactIds: [],
         };
     }
@@ -68,8 +67,8 @@ export class UserService {
             deletedAt: undefined,
         });
 
-        contactResponse.emails.push(email);
-        contactResponse.phoneNumbers.push(phoneNumber);
+        contactResponse.emails.push(newSecondaryContact.email);
+        contactResponse.phoneNumbers.push(newSecondaryContact.phoneNumber);
         contactResponse.secondaryContactIds.push(parseInt(newSecondaryContact.id, 10));
     }
 
@@ -97,6 +96,9 @@ export class UserService {
                 userContactResponse,
             )
         }
+
+        userContactResponse.emails = Array.from(new Set(userContactResponse.emails));
+        userContactResponse.phoneNumbers = Array.from(new Set(userContactResponse.phoneNumbers));
 
         return userContactResponse;
     }

@@ -24,7 +24,8 @@ export class UserRepository {
         const createContactQuery = `INSERT INTO contact 
             (phone_number, email, linked_id, link_precedence,
             created_at, updated_at, deleted_at) 
-            VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`;
+            VALUES($1, $2, $3, $4, $5, $6, $7) 
+            RETURNING id, email, phone_number, link_precedence`;
 
         const rows = await db.query(createContactQuery, [
             userContact.phoneNumber,
@@ -35,7 +36,13 @@ export class UserRepository {
             userContact.updatedAt,
             userContact.deletedAt
         ]);
-        const result = rows[0].id;
-        return result
+
+        const result = {
+            id: rows[0].id,
+            phoneNumber: rows[0].phone_number,
+            email: rows[0].email,
+            linkPrecedence: rows[0].link_precedence,
+        }
+        return result;
     }
 }
